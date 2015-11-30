@@ -1,6 +1,6 @@
 === Amazon Publisher API ===
 Contributors: phkcorp2005
-Donate link: http://example.com/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9674139
 Tags: amazon, publisher api
 Requires at least: 4.3.1
 Tested up to: 4.3
