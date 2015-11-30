@@ -16,11 +16,9 @@
 		
 		$arryprods = $_POST['product'];
 		$products = array();
-		//echo '<pre>';
+
 		foreach($arryprods as $prod) {
-			//echo urldecode($prod);
 			$product = json_decode(urldecode($prod));
-			//$product[] = json_decode(urldecode($prod));
 			$post = array(
 				'ID' => 0,
 				'title' => $product->title,
@@ -38,15 +36,12 @@
 			    'post_type' => 'product',
 			    'post_category' => array(0)
 			);
-			//print_r($product);
-			//print_r($new_post);
 
 			if ($ecommerce == 'ready-ecommerce') {
 				wp_insert_term($product->manufacturer,'products_brands');
 			}
 			
 			$postID = wp_insert_post($new_post);			
-			//$postID = wp_insert_post($post);
 			$category_ids = array($_POST['catname']);
 			wp_set_object_terms( $postID, $category_ids, $products_categories);
 			if ($ecommerce == 'ready-ecommerce') {
@@ -81,7 +76,6 @@
 			
 			if ($ecommerce == 'ready-ecommerce') {
 				$sql = "UPDATE ".$wpdb->prefix."toe_products SET price='$product->price',sku='$product->asin',quantity='$product->available' WHERE post_id='$postID'";
-				//echo $sql;
 				
 				global $wpdb;
 				$wpdb->query($sql);
@@ -92,7 +86,6 @@
 				add_post_meta($postID, '_stock', $product->available);
 			}
 		}
-		//echo '</pre>';
 	} elseif(isset($_POST['getamazon'])) {
 		require dirname(__FILE__).'/../AmazonECS_133/Exeu-Amazon-ECS-PHP-Library-1867eaa/lib/AmazonECS.class.php';
 
@@ -107,15 +100,14 @@
 		    $response = $amazonEcs->category('All')->responseGroup('ItemAttributes,Offers,Images,Reviews')->search($category);
 			$products = array();
 			$i=0;
-			//echo '<pre>'; print_r($response); echo '</pre>';
+
 			foreach($response->Items as $item) {
 				if (is_array($item)) {
 					foreach($item as $product) {
 						$prod = $product->ItemAttributes->Title;
 						$prodcode = $product->ASIN;
 						$listprice = number_format(floatval(preg_replace('/[\$,]/', '', $product->ItemAttributes->ListPrice->FormattedPrice) * $markup),2);
-						//echo 'List price = '.$listprice.'<br>';
-						$avail = $product->Offers->TotalOffers; //ItemAttributes->NumberOfItems;
+						$avail = $product->Offers->TotalOffers;
 						$brand = $product->ItemAttributes->Brand;
 						$manufacturer = $product->ItemAttributes->Manufacturer;
 						$sku = $product->ItemAttributes->SKU;
@@ -125,7 +117,6 @@
 						$imageURL = $product->LargeImage->URL;
 						$image_y = $product->LargeImage->Height->_;
 						$image_x = $product->LargeImage->Width->_;
-						//echo $image_x.', '.$image_y.'<br>';
 						$imageFName = basename($imageURL);
 						$saveFileName = $xcart_dir.'/images/T/'.$imageFName;
 						
@@ -166,13 +157,6 @@
 		$sql = "SELECT mt.term_id,mt.name,mt.slug FROM `".$wpdb->prefix."terms` mt";
 	}
 	$categories = $wpdb->get_results($sql);
-	//$args = array(
-  	//	'orderby' => 'name',
-  	//	'parent' => 0
-  	//);
-	//$args = array( 'taxonomy' => 'products_categories' );
-	//$categories = get_terms();
-	//$taxonomies = get_taxonomies();
 
 ?>
 <h2>Amazon Publisher API</h2>
@@ -188,7 +172,7 @@
 		</tr>
 		<tr>
 			<td>Amazon Associate Tag</td>
-			<td><input type="text" name="awsassociatetag" id="awsassoictaetag" value="<?php echo $awsassociatetag; ?>"></td>
+			<td><input type="text" name="awsassociatetag" id="awsassoictaetag" value="<?php echo $awsassociatetag; ?>"><small>User-defined</small></td>
 		</tr>
 		<tr>
 			<td>Mark-UP</td>
@@ -215,8 +199,6 @@
 <input type="hidden" name="catname" value="<?php echo $catname;?>">
 <table border="2">
 <?php 
-//print_r($categories); 
-//print_r($products);
 if (is_array($products) && count($products) > 0) {
 	echo '<th>'.$catname.'</th>';
 	foreach($products as $product) {
@@ -229,3 +211,21 @@ if (is_array($products) && count($products) > 0) {
 ?>
 </table>
 </form>
+<div>
+	<h1>About Amazon Access Keys</h1>
+	<p>You will use your AWS account security credentials to make calls to the Product Advertising API, authenticate requests, and identify yourself as the sender of a request.</p>
+
+	<h3>To retrieve your AWS account security credentials:</h3>
+	<ol>
+	<li>Sign in your AWS account at AWS Security Credentials Console. Use the same email address and password.</li>
+	<li>A pop-up message appears. Click Continue to Security Credentials.</li>
+	<li>Click Access Keys (Access Key ID and Secret Key).</li>
+	<li>Click Create New Access Key, and then click Show Access Key or Download Key File to retrieve the credentials.</li>
+	<li>Save the access key information in a safe location.</li>
+	<li>Enter the Access and Secret keys in the fields above.</li>
+	</ol>
+
+	<h2>Important</h2>
+	<p>You can access the secret access key only when you first create an access key pair. For security reasons, it cannot be retrieved at any later time. Ensure that you save both the access key ID and its matching secret key. If you lose them, you must create a new access key pair.
+	IAM roles are not currently supported. <b>You must use the root account credentials.</b></p>	
+</div>
