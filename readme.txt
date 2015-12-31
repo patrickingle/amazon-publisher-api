@@ -1,4 +1,4 @@
-=== Amazon Publisher API ===
+=== OmniChannel Publisher API ===
 Contributors: phkcorp2005
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9674139
 Tags: amazon, publisher api
@@ -23,7 +23,7 @@ To instal this plugin, follow these steps:
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Create categories from the Ready Ecommerce or WooCommerce menu
 4. Generate AWS Secrity Credentials from the AWS Console
-5. Go to Setting|Amazon Publishing API, and enter your AWS security credentials, choose an associate tag.
+5. Go to Setting|OmniChannel Publishing API, and enter your AWS security credentials, choose an associate tag.
 6. Press `Save`
 7. Select a category and press Get Amazon products
 8. Choose the products you want to include and press `Add Selected`.

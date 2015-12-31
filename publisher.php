@@ -1,16 +1,16 @@
 <?php
 /**
- * 
- * Plugin Name: Amazon Publisher API
- * Plugin URI: http://github.com/patrickingle/amazon-publisher-api
+ *
+ * Plugin Name: OmniChannel Publisher API
+ * Plugin URI: http://github.com/patrickingle/omni-channel-publisher-api
  * Description: Populate products from Amazon affiliates categories/products
  * Version: 1.1
  * Author: Patrick Ingle
  * Author URI: http://github.com/patrickingle
- * 
+ *
  **/
 
- 
+
 if (!function_exists('awspa_activate')) {
 	function awspa_activate() {
 		if (awspa_is_plugin_active('ready-ecommerce/ecommerce.php')) {
@@ -33,7 +33,7 @@ if (!function_exists('awspa_activate')) {
 		} elseif (awspa_is_plugin_active('woocommerce/woocommerce.php')) {
 			if (class_exists( 'WooCommerce' )) {
 				if (WC_VERSION >= '2.4.6') {
-					update_option('awspa_ecommerce','woocommerce');					
+					update_option('awspa_ecommerce','woocommerce');
 				} else {
 					update_option('awspa_ecommerce','undefined');
 					deactivate_plugins(basename(__FILE__));
@@ -45,7 +45,7 @@ if (!function_exists('awspa_activate')) {
 				wp_die("Requires WooCommerce version 2.4.6+");
 			}
 		} else {
-			deactivate_plugins(basename(__FILE__));	
+			deactivate_plugins(basename(__FILE__));
 			wp_die("Requires Ready! Ecommerce plugin version 0.4.0.9+ or WooCommerce version 2.4.6+");
 		}
 	}
@@ -53,7 +53,7 @@ if (!function_exists('awspa_activate')) {
 
 if (!function_exists('awspa_plugin_menu')) {
 	function awspa_plugin_menu() {
-	    add_options_page('Amazon Publisher API', 'Amazon Publisher API', 8, 'awspa', 'awspa_plugin_options');	
+	    add_options_page('Amazon Publisher API', 'Amazon Publisher API', 8, 'awspa', 'awspa_plugin_options');
 	}
 	add_action( 'admin_menu', 'awspa_plugin_menu' );
 }
@@ -68,7 +68,7 @@ if (!function_exists('awspa_is_plugin_active')) {
 	function awspa_is_plugin_active($plugin) {
 		$active_plugins = (array)get_option( 'active_plugins', array() );
 		if (in_array($plugin,$active_plugins)) return TRUE;
-		return FALSE;	
+		return FALSE;
 	}
 }
 
@@ -79,7 +79,7 @@ if (!function_exists('awspa_settings_link')) {
 	function awspa_settings_link($actions, $file) {
 		if(false !== strpos($file, 'publisher'))
 	 		$actions['settings'] = '<a href="options-general.php?page=awspa">Settings</a>';
-		return $actions; 
+		return $actions;
 	}
 	add_filter('plugin_action_links', 'awspa_settings_link', 2, 2);
 }

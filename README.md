@@ -1,5 +1,5 @@
-# amazon-publisher-api
-Populate your Ready Ecommerce or Woocommerce store from Amazon affiliates products
+# omni-channel-publisher-api
+Populate your OmniChannel store created in Ready Ecommerce or Woocommerce store from Amazon affiliates products
 
 # About the Amazon AWS Access
 <p>You will use your AWS account security credentials to make calls to the Product Advertising API, authenticate requests, and identify yourself as the sender of a request.</p>
