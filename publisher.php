@@ -53,7 +53,7 @@ if (!function_exists('awspa_activate')) {
 
 if (!function_exists('awspa_plugin_menu')) {
 	function awspa_plugin_menu() {
-	    add_options_page('Amazon Publisher API', 'Amazon Publisher API', 8, 'awspa', 'awspa_plugin_options');
+	    add_options_page('OmniChannel Publisher API', 'OmniChannel Publisher API', 8, 'awspa', 'awspa_plugin_options');
 	}
 	add_action( 'admin_menu', 'awspa_plugin_menu' );
 }

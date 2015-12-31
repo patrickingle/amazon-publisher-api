@@ -1,7 +1,7 @@
 <?php
 
 	$catname = '';
-	
+
 	if (isset($_POST['saveapikey'])) {
 		update_option('awsapikey',$_POST['awsapikey']);
 		update_option('awsapisecretkey',$_POST['awsapisecretkey']);
@@ -13,7 +13,7 @@
 		if ($ecommerce == 'woocommerce') {
 			$products_categories = 'product_cat';
 		}
-		
+
 		$arryprods = $_POST['product'];
 		$products = array();
 
@@ -40,16 +40,16 @@
 			if ($ecommerce == 'ready-ecommerce') {
 				wp_insert_term($product->manufacturer,'products_brands');
 			}
-			
-			$postID = wp_insert_post($new_post);			
+
+			$postID = wp_insert_post($new_post);
 			$category_ids = array($_POST['catname']);
 			wp_set_object_terms( $postID, $category_ids, $products_categories);
 			if ($ecommerce == 'ready-ecommerce') {
 				wp_set_object_terms( $postID, array($product->manufacturer), 'products_brands');
 			}
-			
+
 			add_post_meta($postID, 'amazon-detail-page-url', $product->detailPageURL, true);
-			
+
 			$upload_dir = wp_upload_dir();
 			$image_data = file_get_contents($product->imageURL);
 			$filename = basename($product->imageURL);
@@ -72,11 +72,11 @@
 			wp_update_attachment_metadata( $attach_id, $attach_data );
 
 			set_post_thumbnail( $postID, $attach_id );
-			
-			
+
+
 			if ($ecommerce == 'ready-ecommerce') {
 				$sql = "UPDATE ".$wpdb->prefix."toe_products SET price='$product->price',sku='$product->asin',quantity='$product->available' WHERE post_id='$postID'";
-				
+
 				global $wpdb;
 				$wpdb->query($sql);
 			} elseif ($ecommerce == 'woocommerce') {
@@ -119,7 +119,7 @@
 						$image_x = $product->LargeImage->Width->_;
 						$imageFName = basename($imageURL);
 						$saveFileName = $xcart_dir.'/images/T/'.$imageFName;
-						
+
 						$products[$i]['available'] = $avail;
 						$products[$i]['title'] = $prod;
 						$products[$i]['asin'] = $prodcode;
@@ -129,26 +129,26 @@
 						$products[$i]['upc'] = $upc;
 						$products[$i]['imageURL'] = $imageURL;
 						$products[$i]['detailPageURL'] = $detailPageURL;
-						
+
 						$i++;
 					}
 				}
 			}
 
 		} catch(Exception $ex) {
-			
+
 		}
 	}
-	
+
 	$awsapikey = get_option('awsapikey');
 	$awsapisecretkey = get_option('awsapisecretkey');
 	$awsassociatetag = get_option('awspa_associatetag');
 	$markup = get_option('awspa_markup');
-	
+
 	$ecommerce = get_option('awspa_ecommerce');
-	
+
 	global $wpdb;
-	
+
 	if ($ecommerce == 'ready-ecommerce') {
 		$sql = "SELECT mt.term_id,mt.name,mt.slug FROM `".$wpdb->prefix."terms` mt INNER JOIN ".$wpdb->prefix."term_taxonomy mx ON mt.term_id=mx.term_id WHERE mx.taxonomy='products_categories' ORDER BY mt.name ASC";
 	} elseif ($ecommerce == 'woocommerce') {
@@ -159,7 +159,7 @@
 	$categories = $wpdb->get_results($sql);
 
 ?>
-<h2>Amazon Publisher API</h2>
+<h2>OmniChannel Publisher API</h2>
 <form method="post">
 	<table>
 		<tr>
@@ -198,14 +198,14 @@
 <br>
 <input type="hidden" name="catname" value="<?php echo $catname;?>">
 <table border="2">
-<?php 
+<?php
 if (is_array($products) && count($products) > 0) {
 	echo '<th>'.$catname.'</th>';
 	foreach($products as $product) {
 		echo '<tr>';
 		echo '<td><input type="checkbox" name="product[]" value="'.urlencode(json_encode($product)).'"><a href="'.$product['detailPageURL'].'" target="_blank" title="click to open original product page in a new window"><img src="'.$product['imageURL'].'" width="50" height="50"></a>'.$product['title'].'('.$product['available'].'/'.$product['price'].'/'.$product['manufacturer'].')</td>';
 		echo '</tr>';
-	}	
+	}
 	echo '<tr><td><input type="submit" name="addprod" value="Add Selected"></td></tr>';
 }
 ?>
@@ -227,5 +227,5 @@ if (is_array($products) && count($products) > 0) {
 
 	<h2>Important</h2>
 	<p>You can access the secret access key only when you first create an access key pair. For security reasons, it cannot be retrieved at any later time. Ensure that you save both the access key ID and its matching secret key. If you lose them, you must create a new access key pair.
-	IAM roles are not currently supported. <b>You must use the root account credentials.</b></p>	
+	IAM roles are not currently supported. <b>You must use the root account credentials.</b></p>
 </div>
